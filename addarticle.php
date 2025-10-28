@@ -36,7 +36,7 @@ if(isset($_POST['submit'])) {
 <html lang="en">
     <head>
         <title>Add Article</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <h1>Add Article</h1>
