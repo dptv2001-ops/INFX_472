@@ -2,6 +2,8 @@
 require_once "db.php";
 if(session_status() === PHP_SESSION_NONE) {session_start();}
 
+$err = "";
+
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $username = trim($_POST["username"] ?? "");
     $password = $_POST["password"] ?? "";
