@@ -1,6 +1,6 @@
 <?php
 require_once "db.php";
-if(session_status() === PHP_SESSION_NONE) {session_start();}
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
 $err = "";
 
@@ -45,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <head>
         <meta charset = "utf-8">
         <title>Create Account</title>
+        <link rel="stylesheet" href="style.css">
     </head>
 
     <body>
