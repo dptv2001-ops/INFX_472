@@ -33,13 +33,13 @@ $message = isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : '';
             <p style="color: var(--primary-color); font-weight: bold;"><?php echo $message; ?></p>
         <?php endif; ?>
 
-        <p>You must log in to view or add articles and navigate through the website.</p>
+        <p style="text-align: center;">You must log in to view or add articles and navigate through the website.</p>
         
         <!-- Navigation for Unauthenticated Users -->
-        <p>
-            <a href="login.php">Log In</a> | 
+        <div class="login-links">
+            <a href="login.php">Log In</a>  
             <a href="createuser.php">Create New Account</a>
-        </p>
+        </div>
     </main>
     
     <footer>
