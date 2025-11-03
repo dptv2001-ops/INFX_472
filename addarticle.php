@@ -4,6 +4,7 @@ require_once "auth.php";
 require_once "db.php";
 require_auth();
 $user = current_user();
+$id = user_id();
 
 if($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
@@ -11,24 +12,20 @@ if($mysqli->connect_errno) {
 
 // checks if form is submitted
 if(isset($_POST['submit'])) {
+    $short_title = $mysqli->real_escape_string($_POST["short-title"]);
+        $title = $mysqli->real_escape_string($_POST["title"]);
+        $intro = $mysqli->real_escape_string($_POST["intro"]);
+        $body = $mysqli->real_escape_string($_POST["body"]);
+        $references = $mysqli->real_escape_string($_POST["references"]);
+        $create_date = date("Y-m-d H:i:s");
     // gets submitted values
     if(isset($_FILES['image'])) {
         $imagename = $_FILES['image']['name'];
         $imagetmp = $_FILES['image']['tmp_name'];
-        $title = $mysqli->real_escape_string($_POST["title"]);
-        $intro = $mysqli->real_escape_string($_POST["intro"]);
-        $body = $mysqli->real_escape_string($_POST["body"]);
-        $references = $mysqli->real_escape_string($_POST["references"]);
-
-        $sql = "INSERT INTO article (image, title, intro, body, `reference`) VALUES ('$imagename', '$title', '$intro', '$body', '$references')";
+        $sql = "INSERT INTO article (image, short_title, title, intro, body, `reference`, author_id, created_at) VALUES ('$imagename', '$short_title', '$title', '$intro', '$body', '$references', '$id', '$create_date')";
     }
     else {
-        $title = $mysqli->real_escape_string($_POST["title"]);
-        $intro = $mysqli->real_escape_string($_POST["intro"]);
-        $body = $mysqli->real_escape_string($_POST["body"]);
-        $references = $mysqli->real_escape_string($_POST["references"]);
-
-        $sql = "INSERT INTO article (title, intro, body, `reference`) VALUES ('$title', '$intro', '$body', '$references')";
+        $sql = "INSERT INTO article (short_title, title, intro, body, `reference`, created_at) VALUES ('$short_title', '$title', '$intro', '$body', '$references', '$create_date')";
     }
 
     $submit = $mysqli->query($sql);
@@ -63,6 +60,10 @@ if(isset($_POST['submit'])) {
             <div class="form-input" id="image-upload">
                 <label for="image">Image:</label><br>
                 <input type="file" id="image" accept="image/*" name="image">
+            </div>
+             <div class="form-input">
+                <label for="short-title">Short URL title:</label><br>
+                <input type="text" id="short-title" name="short-title" required>
             </div>
             <div class="form-input">
                 <label for="title">Title:</label><br>
