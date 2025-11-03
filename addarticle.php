@@ -1,6 +1,10 @@
 <?php 
 
-include 'db.php';
+require_once "auth.php";
+require_once "db.php";
+require_auth();
+$user = current_user();
+
 if($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
@@ -39,9 +43,20 @@ if(isset($_POST['submit'])) {
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
+        <header>
+        <nav class="nav-bar">
+            <ul>
+                <li><a href="wiki.php">Home</a></li>
+                <li><a class="active" href="addarticle.php">Add Article</a></li>
+                <li><a href="logout.php">Logout</a></li>
+                <li><?php echo htmlspecialchars($user); ?></li>
+            </ul>
+        </nav>
+        <h1>The INFX Wiki</h1>
+        <p class="subheading">Welcome, <?php echo htmlspecialchars($user); ?>!</p>
+    </header>
         <h1>Add Article</h1>
         <div class="subheading">
-            <a href="index.php" id="return">Go back home</a>
             <p>Use the form below to add a new article to the wiki.</p>
         </div>
         <form method="POST" enctype="multipart/form-data" action="addarticle.php">

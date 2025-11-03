@@ -28,13 +28,16 @@ if (isset($_GET['short_title'])) {
 </head>
 <body>
     <header>
+        <nav class="nav-bar">
+            <ul>
+                <li><a class="active" href="wiki.php">Home</a></li>
+                <li><a href="addarticle.php">Add Article</a></li>
+                <li><a href="logout.php">Logout</a></li>
+                <li><?php echo htmlspecialchars($user); ?></li>
+            </ul>
+        </nav>
         <h1>The INFX Wiki</h1>
         <p class="subheading">Welcome, <?php echo htmlspecialchars($user); ?>!</p>
-        <nav style="text-align:center; margin-bottom:20px;">
-            <a href="wiki.php" id="return">Home</a> |
-            <a href="addarticle.php" id="return">Add Article</a> |
-            <a href="logout.php" id="return">Logout</a>
-        </nav>
     </header>
 
     <main>
@@ -78,7 +81,9 @@ if (isset($_GET['short_title'])) {
             <?php
                 endwhile;
             else:
-                echo "<p>No articles yet. <a href='addarticle.php'>Add one here</a>.</p>";
+                echo "<p>No articles yet. <a href='addarticle.php' style='background-color: var(--primary-color);
+                color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px;
+                transition: background-color 0.3s ease'>Add one here</a></p>";
             endif;
             ?>
         </section>
