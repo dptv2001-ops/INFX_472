@@ -15,8 +15,4 @@ function require_auth(){
 function current_user(){
     return $_SESSION['username'] ?? null;
 }
-
-function user_id(){
-    return $_SESSION['user_id'] ?? null;
-}
 ?>

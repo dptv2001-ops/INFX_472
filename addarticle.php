@@ -1,40 +1,59 @@
 <?php 
+/**
+ * ADD ARTICLE PAGE
+ * 
+ * This page allows authenticated users to add new articles to the wiki.
+ * It handles form submission, validates input, uploads images, and saves
+ * articles to the database.
+ */
 
+// Include required files for authentication and database connection
 require_once "auth.php";
 require_once "db.php";
-require_auth();
-$user = current_user();
-$id = user_id();
 
-if($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+// AUTHENTICATION CHECK
+// Ensure the user is logged in before allowing article creation
+require_auth();
+
+// Get the current logged-in user's ID from the session
+// This will be used to associate the article with the author
+$user_id = $_SESSION['user_id'] ?? null;
+if (!$user_id) {
+    // Redirect to login page if user ID is not found in session
+    header("Location: login.php?msg=Please+log+in+to+add+articles");
+    exit();
 }
 
-// checks if form is submitted
+// Initialize message variables for displaying success/error feedback
+$success_msg = "";
+$error_msg = "";
+
+// FORM SUBMISSION HANDLING
+// Check if the form has been submitted
 if(isset($_POST['submit'])) {
     $short_title = $mysqli->real_escape_string($_POST["short-title"]);
-    $title = $mysqli->real_escape_string($_POST["title"]);
-    $intro = $mysqli->real_escape_string($_POST["intro"]);
-    $body = $mysqli->real_escape_string($_POST["body"]);
-    $references = $mysqli->real_escape_string($_POST["references"]);
-    $create_date = date("Y-m-d H:i:s");
-    // gets submitted values - if image is uploaded
+        $title = $mysqli->real_escape_string($_POST["title"]);
+        $intro = $mysqli->real_escape_string($_POST["intro"]);
+        $body = $mysqli->real_escape_string($_POST["body"]);
+        $references = $mysqli->real_escape_string($_POST["references"]);
+        $create_date = date("Y-m-d H:i:s");
+    // gets submitted values
     if(isset($_FILES['image'])) {
         $imagename = $_FILES['image']['name'];
         $imagetmp = $_FILES['image']['tmp_name'];
         $folder = "./images/".$imagename;
         $sql = "INSERT INTO article (image, short_title, title, intro, body, `reference`, author_id, created_at) VALUES ('$imagename', '$short_title', '$title', '$intro', '$body', '$references', '$id', '$create_date')";
     }
-    // gets submitted values - if no image is uploaded
     else {
         $sql = "INSERT INTO article (short_title, title, intro, body, `reference`, created_at) VALUES ('$short_title', '$title', '$intro', '$body', '$references', '$create_date')";
     }
 
     $submit = $mysqli->query($sql);
-    // check if image file is moved to folder
-    if(!move_uploaded_file($imagetmp, $folder)) {
+    if(move_uploaded_file($imagetmp, $folder)) {
+        echo "Image uploaded successfully";
+    } else {
         echo "Failed to upload image";
-    } 
+    }
 }
 
 ?>
@@ -42,42 +61,73 @@ if(isset($_POST['submit'])) {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Add Article</title>
+        <!-- HTML HEAD SECTION -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Add Article - The INFX Wiki</title>
         <link rel="stylesheet" href="style.css">
+        
+        <!-- Page-specific styles for the add article form -->
+        <style>
+            body {
+                background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+        </style>
     </head>
     <body>
-        <header>
-        <nav class="nav-bar">
-            <ul>
-                <li><a href="wiki.php">Home</a></li>
-                <li><a class="active" href="addarticle.php">Add Article</a></li>
-                <li><a href="logout.php">Logout</a></li>
-                <li><?php echo htmlspecialchars($user); ?></li>
-            </ul>
-        </nav>
-        <h1>The INFX Wiki</h1>
-        <p class="subheading">Welcome, <?php echo htmlspecialchars($user); ?>!</p>
-    </header>
-        <h1>Add Article</h1>
-        <div class="subheading">
-            <p>Use the form below to add a new article to the wiki.</p>
-        </div>
-        <form method="POST" enctype="multipart/form-data" action="addarticle.php">
-            <div class="form-input" id="image-upload">
-                <label for="image">Image:</label><br>
-                <input type="file" id="image" accept="image/*" name="image">
+        <!-- PAGE HEADER -->
+        <header style="text-align: center; margin-bottom: 30px; background: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2);">
+            <h1 style="color: #4a90e2;">Add Article</h1>
+            <div class="subheading">
+                <a href="wiki.php" id="return">← Back to Home</a>
+                <p style="margin-top: 15px; color: #666;">Use the form below to add a new article to the wiki.</p>
             </div>
-             <div class="form-input">
-                <label for="short-title">Short URL title:</label><br>
-                <input type="text" id="short-title" name="short-title" required>
+        </header>
+        
+        <!-- ERROR MESSAGE DISPLAY -->
+        <!-- Display error messages if validation failed or an error occurred -->
+        <?php if ($error_msg): ?>
+            <div style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f5c6cb; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <?php echo htmlspecialchars($error_msg); ?>
             </div>
-            <div class="form-input">
-                <label for="title">Title:</label><br>
-                <input type="text" id="title" name="title" required>
+        <?php endif; ?>
+        
+        <!-- SUCCESS MESSAGE DISPLAY -->
+        <!-- Display success messages (though we usually redirect on success) -->
+        <?php if ($success_msg): ?>
+            <div style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #c3e6cb; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <?php echo htmlspecialchars($success_msg); ?>
             </div>
-            <div class="form-input">
-                <label for="intro">Intro Text:</label><br>
-                <textarea id="intro" name="intro" rows="4" cols="50" required></textarea>
+        <?php endif; ?>
+        
+        <!-- ARTICLE FORM -->
+        <!-- 
+             Form attributes:
+             - method="POST": Send form data via POST request
+             - enctype="multipart/form-data": Required for file uploads
+             - action="addarticle.php": Submit to this same page
+        -->
+        <form method="POST" enctype="multipart/form-data" action="addarticle.php" style="background: rgba(255, 255, 255, 0.9); padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2); max-width: 800px; margin: 0 auto;">
+            
+            <!-- Image Upload Field (Optional) -->
+            <div class="form-input" id="image-upload" style="margin-bottom: 20px;">
+                <label for="image" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Image (optional):</label>
+                <input type="file" id="image" accept="image/*" name="image" style="padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px; width: 100%; box-sizing: border-box;">
+                <small style="color: #666;">Max size: 5MB. Allowed types: JPEG, PNG, GIF, WebP</small>
+            </div>
+            
+            <!-- Title Field (Required) -->
+            <div class="form-input" style="margin-bottom: 20px;">
+                <label for="title" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Title: <span style="color: red;">*</span></label>
+                <input type="text" id="title" name="title" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; box-sizing: border-box;">
+            </div>
+            
+            <!-- Intro Text Field (Required) -->
+            <div class="form-input" style="margin-bottom: 20px;">
+                <label for="intro" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Intro Text: <span style="color: red;">*</span></label>
+                <textarea id="intro" name="intro" rows="4" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 1em; box-sizing: border-box; font-family: inherit; resize: vertical;"></textarea>
             </div>
             <div class="form-input">
                 <label for="body">Body:</label><br>
@@ -87,6 +137,7 @@ if(isset($_POST['submit'])) {
                 <label for="references">References:</label><br>
                 <textarea id="references" name="references" rows="4" cols="50"></textarea>
              </div>
+             <!-- reference section, image, date, user uploaded -->
             <input type="submit" value="Add Article" name="submit">
         </form>
     </body>
