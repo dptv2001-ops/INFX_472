@@ -45,8 +45,9 @@ if (isset($_GET['short_title'])) {
         <!-- Single Article View -->
         <article style="max-width:800px; margin:auto;">
             <h2><?php echo htmlspecialchars($article['title']); ?></h2>
+            <!-- calls image from folder directory-->
             <?php if ($article['image']): ?>
-                <img src="uploads/<?php echo htmlspecialchars($article['image']); ?>" alt="Article Image" style="max-width:100%; border-radius:10px;">
+                <img src="images/<?php echo htmlspecialchars($article['image']); ?>" alt="Article Image" style="max-width:100%; border-radius:10px;">
             <?php endif; ?>
             <p><strong>Intro:</strong> <?php echo nl2br(htmlspecialchars($article['intro'])); ?></p>
             <p><?php echo nl2br(htmlspecialchars($article['body'])); ?></p>
