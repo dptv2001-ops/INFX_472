@@ -1,0 +1,120 @@
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #6bb6ff;
+    --background: #EEF4ED;
+    --text: #334E58;
+    --light-blue: #6bb6ff;
+    --blue: #4a90e2;
+    --sky-blue: #87ceeb;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    margin: 30px;
+    color: var(--text);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-size: 2.5em;
+}
+
+h2 {
+    color: var(--primary-color);
+    margin-top: 30px;
+}
+
+h3 a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+h3 a:hover {
+    color: var(--secondary-color);
+}
+
+.subheading {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#return, a {
+    background-color: var(--background);
+    padding: 10px 16px;
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+    font-weight: 600;
+    display: inline-block;
+}
+
+#return:hover, a:hover {
+    background-color: #e3f2fd;
+    color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background);
+    box-shadow: 0 0 5px #c7d2c4;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 420px;
+    margin: auto;
+}
+
+.form-input {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, textarea {
+    margin-top: 5px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    max-width: 100%;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    font-size: 1em;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #4a90e2;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    transform: translateY(-2px);
+}
+
+input[type="submit"], button[type="submit"] {
+    background: linear-gradient(135deg, #6bb6ff 0%, #4a90e2 100%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 15px;
+    width: 250px;
+    align-self: center;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+}
+
+input[type="submit"]:hover, button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.6);
+}
