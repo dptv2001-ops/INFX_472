@@ -22,6 +22,7 @@ if(isset($_POST['submit'])) {
     if(isset($_FILES['image'])) {
         $imagename = $_FILES['image']['name'];
         $imagetmp = $_FILES['image']['tmp_name'];
+        $folder = "./images/".$imagename;
         $sql = "INSERT INTO article (image, short_title, title, intro, body, `reference`, author_id, created_at) VALUES ('$imagename', '$short_title', '$title', '$intro', '$body', '$references', '$id', '$create_date')";
     }
     else {
@@ -29,6 +30,11 @@ if(isset($_POST['submit'])) {
     }
 
     $submit = $mysqli->query($sql);
+    if(move_uploaded_file($imagetmp, $folder)) {
+        echo "Image uploaded successfully";
+    } else {
+        echo "Failed to upload image";
+    }
 }
 
 ?>
