@@ -13,28 +13,28 @@ if($mysqli->connect_errno) {
 // checks if form is submitted
 if(isset($_POST['submit'])) {
     $short_title = $mysqli->real_escape_string($_POST["short-title"]);
-        $title = $mysqli->real_escape_string($_POST["title"]);
-        $intro = $mysqli->real_escape_string($_POST["intro"]);
-        $body = $mysqli->real_escape_string($_POST["body"]);
-        $references = $mysqli->real_escape_string($_POST["references"]);
-        $create_date = date("Y-m-d H:i:s");
-    // gets submitted values
+    $title = $mysqli->real_escape_string($_POST["title"]);
+    $intro = $mysqli->real_escape_string($_POST["intro"]);
+    $body = $mysqli->real_escape_string($_POST["body"]);
+    $references = $mysqli->real_escape_string($_POST["references"]);
+    $create_date = date("Y-m-d H:i:s");
+    // gets submitted values - if image is uploaded
     if(isset($_FILES['image'])) {
         $imagename = $_FILES['image']['name'];
         $imagetmp = $_FILES['image']['tmp_name'];
         $folder = "./images/".$imagename;
         $sql = "INSERT INTO article (image, short_title, title, intro, body, `reference`, author_id, created_at) VALUES ('$imagename', '$short_title', '$title', '$intro', '$body', '$references', '$id', '$create_date')";
     }
+    // gets submitted values - if no image is uploaded
     else {
         $sql = "INSERT INTO article (short_title, title, intro, body, `reference`, created_at) VALUES ('$short_title', '$title', '$intro', '$body', '$references', '$create_date')";
     }
 
     $submit = $mysqli->query($sql);
-    if(move_uploaded_file($imagetmp, $folder)) {
-        echo "Image uploaded successfully";
-    } else {
+    // check if image file is moved to folder
+    if(!move_uploaded_file($imagetmp, $folder)) {
         echo "Failed to upload image";
-    }
+    } 
 }
 
 ?>
@@ -87,7 +87,6 @@ if(isset($_POST['submit'])) {
                 <label for="references">References:</label><br>
                 <textarea id="references" name="references" rows="4" cols="50"></textarea>
              </div>
-             <!-- reference section, image, date, user uploaded -->
             <input type="submit" value="Add Article" name="submit">
         </form>
     </body>
