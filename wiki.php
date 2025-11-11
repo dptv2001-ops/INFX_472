@@ -39,6 +39,54 @@ if (isset($_GET['short_title'])) {
     $result = $mysqli->query($sql);
     $article = $result->fetch_assoc();
 }
+
+// hides edit form
+$editmode_title = "style='display:none;'";
+$editmode_intro = "style='display:none;'";
+$editmode_body = "style='display:none;'";
+$editmode_ref = "style='display:none;'";
+
+// if edit icon is pressed, show form - based on which icon label is pressed
+if(isset($_POST['title_form'])) {
+    $editmode_title = "style='inline-block;'";
+}
+elseif(isset($_POST['intro_form'])) {
+    $editmode_intro = "style='inline-block;'";
+}
+elseif(isset($_POST['body_form'])) {
+    $editmode_body = "style='inline-block;'";
+}
+elseif(isset($_POST['ref_form'])) {
+    $editmode_ref = "style='inline-block;'";
+}
+
+// upload change to database - based on which edit form was submitted
+if(isset($_POST['confirm_title'])) {
+    $short_title = $mysqli->real_escape_string($_GET['short_title']);
+    $newtitle = $mysqli->real_escape_string($_POST['title_input']);
+    $sql = "UPDATE article SET title='$newtitle' WHERE short_title='$short_title'";
+    $result = $mysqli->query($sql);
+}
+elseif(isset($_POST['confirm_intro'])) {
+    $short_title = $mysqli->real_escape_string($_GET['short_title']);
+    $intro = $mysqli->real_escape_string($_POST['intro_input']);
+    $sql = "UPDATE article SET intro='$intro' WHERE short_title='$short_title'";
+    $result = $mysqli->query($sql);
+}
+elseif(isset($_POST['confirm_body'])) {
+    $short_title = $mysqli->real_escape_string($_GET['short_title']);
+    $body = $mysqli->real_escape_string($_POST['body_input']);
+    $sql = "UPDATE article SET body='$body' WHERE short_title='$short_title'";
+    $result = $mysqli->query($sql);
+}
+elseif(isset($_POST['confirm_references'])) {
+    $short_title = $mysqli->real_escape_string($_GET['short_title']);
+    $ref = $mysqli->real_escape_string($_POST['intro_input']);
+    $sql = "UPDATE article SET reference='$ref' WHERE short_title='$short_title'";
+    $result = $mysqli->query($sql);
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +95,7 @@ if (isset($_GET['short_title'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The INFX Wiki</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
@@ -141,14 +190,25 @@ if (isset($_GET['short_title'])) {
         <!-- Display a single article when short_title is provided in URL -->
         <article style="max-width:800px; margin:auto;">
             <!-- Article Title -->
-            <h2><?php echo htmlspecialchars($article['title']); ?></h2>
-            
+   
+            <h2 class="can_edit"><?php echo htmlspecialchars($article['title']); ?> <form class="style-strip" 
+            method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+            <!-- triggers edit form -->
+            <button type="submit" name="title_form" style="all:unset;"><i class="fa-regular fa-pen-to-square hidden"></button></i></form></h2>
+            <!-- edit form -->
+            <div class="form-input" <?php echo $editmode_title; ?>>
+                <form method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                    <label for="title_input">Edit title:</label><br>
+                    <input type="text" id="title_input" name="title_input" placeholder="Enter text here">
+                    <input type="submit" value="Confirm change" name="confirm_title">
+                </form>
+            </div>
             <!-- Article Image (if provided) -->
             <?php if (!empty($article['image'])): ?>
                 <?php 
                 $image_filename = htmlspecialchars($article['image']);
-                $image_path_relative = "uploads/" . $image_filename;
-                $image_path_absolute = __DIR__ . "/uploads/" . $image_filename;
+                $image_path_relative = "images/" . $image_filename;
+                $image_path_absolute = __DIR__ . "/images/" . $image_filename;
                 // Check if file exists using absolute path
                 if (file_exists($image_path_absolute)): ?>
                     <img src="<?php echo $image_path_relative; ?>" alt="Article Image" style="max-width:100%; border-radius:10px; margin: 20px 0;">
@@ -159,14 +219,64 @@ if (isset($_GET['short_title'])) {
             
             <!-- Article Intro Text -->
             <!-- nl2br() converts newlines to <br> tags for proper display -->
-            <p><strong>Intro:</strong> <?php echo nl2br(htmlspecialchars($article['intro'])); ?></p>
+            <h3 class="can_edit">
+                    Intro
+                    <form class="style-strip" method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                        <!-- triggers edit form -->
+                        <button type="submit" name="intro_form" style="all:unset;">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                    </form>:
+            </h3>
+            <!-- edit form -->
+            <div class="form-input" <?php echo $editmode_intro; ?>>
+                <form method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                    <label for="intro_input">Edit intro:</label><br>
+                    <input type="text" id="intro_input" name="intro_input" placeholder="Enter text here">
+                    <input type="submit" value="Confirm change" name="confirm_intro">
+                </form>
+            </div>
+            <p><?php echo nl2br(htmlspecialchars($article['intro'])); ?></p>
             
             <!-- Article Body Content -->
+            <h4 class="can_edit">
+                Body
+                    <form class="style-strip" method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                        <!-- triggers edit form -->
+                        <button type="submit" name="body_form" style="all:unset;">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                    </form>:
+            </h4>
+            <div class="body-input" <?php echo $editmode_body; ?>>
+                <form method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                    <label for="body_input">Edit intro:</label><br>
+                    <input type="text" id="body_input" name="body_input" placeholder="Enter text here">
+                    <input type="submit" value="Confirm change" name="confirm_body">
+                </form>
+            </div>
             <p><?php echo nl2br(htmlspecialchars($article['body'])); ?></p>
 
             <!-- Article References (if provided) -->
             <?php if ($article['reference']): ?>
-                <p><strong>References:</strong><br><?php echo nl2br(htmlspecialchars($article['reference'])); ?></p>
+                <h3 class="can_edit">
+                    References
+                    <form class="style-strip" method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                        <!-- triggers edit form -->
+                        <button type="submit" name="ref_form" style="all:unset;">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                    </form>:
+                </h3>
+                <!-- edit form -->
+                <div class="form-input" <?php echo $editmode_ref; ?>>
+                    <form method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                        <label for="references_input">Edit references:</label><br>
+                        <input type="text" id="references_input" name="references_input" placeholder="Enter text here">
+                        <input type="submit" value="Confirm change" name="confirm_references">
+                    </form>
+                </div>
+                <?php echo nl2br(htmlspecialchars($article['reference'])); ?>
             <?php endif; ?>
 
             <!-- Article Metadata -->
