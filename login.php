@@ -430,6 +430,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 height: 300px;
             }
 
+            .login-logo {
+                display: block;
+                width: 140px;
+                height: auto;
+                margin: 0 auto 25px auto;
+                filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.2));
+                animation: fadeIn 0.8s ease-out;
+            }
+
             .login-button:active {
                 transform: translateY(0);
             }
@@ -526,6 +535,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         
         <div class="login-container">
             <div class="login-card">
+                <img src="images/infx_logo.png" alt="INFX Wiki logo" class="login-logo">
                 <h1>Welcome Back</h1>
                 <p class="login-subtitle">Sign in to continue to The INFX Wiki</p>
 
