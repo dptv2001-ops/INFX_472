@@ -49,10 +49,12 @@ if(isset($_POST['submit'])) {
     }
 
     $submit = $mysqli->query($sql);
-    if(move_uploaded_file($imagetmp, $folder)) {
-        echo "Image uploaded successfully";
-    } else {
-        echo "Failed to upload image";
+
+    if($submit) {
+        echo "Added article successfully. Return to home to view.";
+    }
+    else {
+        echo "Error" . mysqli_error($mysqli);
     }
 }
 
@@ -118,9 +120,10 @@ if(isset($_POST['submit'])) {
                 <small style="color: #666;">Max size: 5MB. Allowed types: JPEG, PNG, GIF, WebP</small>
             </div>
             
+            <!-- Short Title Field (Required) -->
             <div class="form-input" id="short_title" style="margin-bottom: 20px;">
-                <label for="short_title" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Short title:</label>
-                <input type="text" id="short_title"  name="short_title" style="padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px; width: 100%; box-sizing: border-box;">
+                <label for="short_title" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Short title: <span style="color: red;">*</span></label>
+                <input type="text" id="short_title"  name="short_title" required style="padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px; width: 100%; box-sizing: border-box;">
             </div>
 
             <!-- Title Field (Required) -->
@@ -145,5 +148,9 @@ if(isset($_POST['submit'])) {
              <!-- reference section, image, date, user uploaded -->
             <input type="submit" value="Add Article" name="submit">
         </form>
+
+        <footer style="text-align:center;">
+            <p>&copy; 2025 INFX Wiki Project</p>
+        </footer>
     </body>
 </html>

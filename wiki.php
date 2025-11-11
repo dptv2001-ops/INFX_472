@@ -5,6 +5,11 @@
  * This page displays the wiki articles. It can show either:
  * 1. A list of all articles (default view)
  * 2. A single article when requested by short_title parameter
+ * 
+ * An authenticated user can edit fields within a wiki page by hovering over field headings (i.e. Title)
+ * A pencil icon will indicate that the field can be edited. Click the icon to open edit form
+ * When icon is clicked, page auto-directs to top of page. Scroll down to find edit form
+ * 
  */
 
 // Include required files for authentication and database connection
@@ -66,6 +71,7 @@ if(isset($_POST['confirm_title'])) {
     $newtitle = $mysqli->real_escape_string($_POST['title_input']);
     $sql = "UPDATE article SET title='$newtitle' WHERE short_title='$short_title'";
     $result = $mysqli->query($sql);
+    // forces page to resubmit after input is confirmed
     header("Refresh:0");
 }
 elseif(isset($_POST['confirm_intro'])) {
@@ -89,7 +95,6 @@ elseif(isset($_POST['confirm_references'])) {
     $result = $mysqli->query($sql);
     header("Refresh:0");
 }
-
 
 
 ?>
@@ -199,7 +204,7 @@ elseif(isset($_POST['confirm_references'])) {
    
             <h2 class="can_edit"><?php echo htmlspecialchars($article['title']); ?> <form class="style-strip" 
             method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
-            <!-- triggers edit form -->
+            <!-- clickable button triggers edit form -->
             <button type="submit" name="title_form" style="all:unset;"><i class="fa-regular fa-pen-to-square hidden"></button></i></form></h2>
             <!-- edit form -->
             <div class="form-input" <?php echo $editmode_title; ?>>
@@ -228,7 +233,7 @@ elseif(isset($_POST['confirm_references'])) {
             <h3 class="can_edit">
                     Intro
                     <form class="style-strip" method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
-                        <!-- triggers edit form -->
+                        <!-- clickable button triggers edit form -->
                         <button type="submit" name="intro_form" style="all:unset;">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </button>
@@ -236,7 +241,7 @@ elseif(isset($_POST['confirm_references'])) {
             </h3>
             <!-- edit form -->
             <div class="form-input" <?php echo $editmode_intro; ?>>
-                <form method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
+                <form  method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
                     <label for="intro_input">Edit intro:</label><br>
                     <input type="text" id="intro_input" name="intro_input" placeholder="Enter text here">
                     <input type="submit" value="Confirm change" name="confirm_intro">
@@ -248,7 +253,7 @@ elseif(isset($_POST['confirm_references'])) {
             <h4 class="can_edit">
                 Body
                     <form class="style-strip" method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
-                        <!-- triggers edit form -->
+                        <!-- clickable button triggers edit form -->
                         <button type="submit" name="body_form" style="all:unset;">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </button>
@@ -268,7 +273,7 @@ elseif(isset($_POST['confirm_references'])) {
                 <h3 class="can_edit">
                     References
                     <form class="style-strip" method="POST" action="wiki.php?short_title=<?php echo urlencode($article['short_title']); ?>">
-                        <!-- triggers edit form -->
+                        <!-- clickable button triggers edit form -->
                         <button type="submit" name="ref_form" style="all:unset;">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </button>
