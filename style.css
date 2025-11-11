@@ -118,3 +118,42 @@ input[type="submit"]:hover, button[type="submit"]:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(74, 144, 226, 0.6);
 }
+
+p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+.can_edit {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.can_edit form.style-strip {
+    margin: 0;
+    padding: 0;
+}
+
+.can_edit button {
+    all: unset;
+    cursor: pointer;
+}
+
+.can_edit i {
+    margin-left: 10px;
+    color: var(--primary-color);
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.can_edit:hover i {
+    visibility: visible;
+}
+ 
+form.style-strip {
+    all: unset;
+    display: inline-flex;
+}

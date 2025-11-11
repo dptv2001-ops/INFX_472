@@ -31,7 +31,7 @@ $error_msg = "";
 // FORM SUBMISSION HANDLING
 // Check if the form has been submitted
 if(isset($_POST['submit'])) {
-    $short_title = $mysqli->real_escape_string($_POST["short-title"]);
+    $short_title = $mysqli->real_escape_string($_POST["short_title"]);
         $title = $mysqli->real_escape_string($_POST["title"]);
         $intro = $mysqli->real_escape_string($_POST["intro"]);
         $body = $mysqli->real_escape_string($_POST["body"]);
@@ -42,7 +42,7 @@ if(isset($_POST['submit'])) {
         $imagename = $_FILES['image']['name'];
         $imagetmp = $_FILES['image']['tmp_name'];
         $folder = "./images/".$imagename;
-        $sql = "INSERT INTO article (image, short_title, title, intro, body, `reference`, author_id, created_at) VALUES ('$imagename', '$short_title', '$title', '$intro', '$body', '$references', '$id', '$create_date')";
+        $sql = "INSERT INTO article (image, short_title, title, intro, body, `reference`, author_id, created_at) VALUES ('$imagename', '$short_title', '$title', '$intro', '$body', '$references', '$user_id', '$create_date')";
     }
     else {
         $sql = "INSERT INTO article (short_title, title, intro, body, `reference`, created_at) VALUES ('$short_title', '$title', '$intro', '$body', '$references', '$create_date')";
@@ -118,6 +118,11 @@ if(isset($_POST['submit'])) {
                 <small style="color: #666;">Max size: 5MB. Allowed types: JPEG, PNG, GIF, WebP</small>
             </div>
             
+            <div class="form-input" id="short_title" style="margin-bottom: 20px;">
+                <label for="short_title" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Short title:</label>
+                <input type="text" id="short_title"  name="short_title" style="padding: 8px; border: 2px solid #e0e0e0; border-radius: 8px; width: 100%; box-sizing: border-box;">
+            </div>
+
             <!-- Title Field (Required) -->
             <div class="form-input" style="margin-bottom: 20px;">
                 <label for="title" style="display: block; margin-bottom: 8px; color: #333; font-weight: 600;">Title: <span style="color: red;">*</span></label>
