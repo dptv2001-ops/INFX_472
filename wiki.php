@@ -66,25 +66,30 @@ if(isset($_POST['confirm_title'])) {
     $newtitle = $mysqli->real_escape_string($_POST['title_input']);
     $sql = "UPDATE article SET title='$newtitle' WHERE short_title='$short_title'";
     $result = $mysqli->query($sql);
+    header("Refresh:0");
 }
 elseif(isset($_POST['confirm_intro'])) {
     $short_title = $mysqli->real_escape_string($_GET['short_title']);
     $intro = $mysqli->real_escape_string($_POST['intro_input']);
     $sql = "UPDATE article SET intro='$intro' WHERE short_title='$short_title'";
     $result = $mysqli->query($sql);
+    header("Refresh:0");
 }
 elseif(isset($_POST['confirm_body'])) {
     $short_title = $mysqli->real_escape_string($_GET['short_title']);
     $body = $mysqli->real_escape_string($_POST['body_input']);
     $sql = "UPDATE article SET body='$body' WHERE short_title='$short_title'";
     $result = $mysqli->query($sql);
+    header("Refresh:0");
 }
 elseif(isset($_POST['confirm_references'])) {
     $short_title = $mysqli->real_escape_string($_GET['short_title']);
     $ref = $mysqli->real_escape_string($_POST['intro_input']);
     $sql = "UPDATE article SET reference='$ref' WHERE short_title='$short_title'";
     $result = $mysqli->query($sql);
+    header("Refresh:0");
 }
+
 
 
 ?>
