@@ -117,6 +117,7 @@ if (isset($_GET['short_title'])) {
 </head>
 <body>
     <header>
+        <img src="images/infx_logo.png" alt="INFX Wiki logo" style="width: 120px; height: auto; display: block; margin: 0 auto 15px auto;">
         <h1>The INFX Wiki</h1>
         <p class="subheading">Welcome, <?php echo htmlspecialchars($user); ?>!</p>
         <nav>
